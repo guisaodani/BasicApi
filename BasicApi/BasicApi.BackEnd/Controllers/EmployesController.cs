@@ -1,4 +1,5 @@
 ﻿using BasicApi.BackEnd.Data;
+using BasicApi.BackEnd.UnitsOfWork.Interfaces;
 using BasicApi.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,34 +8,17 @@ namespace BasicApi.BackEnd.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EmployesController : ControllerBase
+public class EmployesController : GenericController<Employee>
 {
-    private readonly DataContext _context;
+    private readonly IGenericUnitOfWork<Employee> _unitOfWork;
 
-    public EmployesController(DataContext context)
+    public EmployesController(IGenericUnitOfWork<Employee> unitOfWork) : base(unitOfWork)
     {
-        _context = context;
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetAsync()
-    {
-        return Ok(await _context.Employees.ToListAsync());
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync(int id)
-    {
-        var employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
-        if (employee == null)
-        {
-            return NotFound();
-        }
-        return Ok(employee);
+        _unitOfWork = unitOfWork;
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> SearchAsync([FromQuery] string letter)
+    public async Task<IActionResult> FindAsync([FromQuery] string letter)
     {
         if (string.IsNullOrWhiteSpace(letter))
         {
@@ -43,24 +27,14 @@ public class EmployesController : ControllerBase
 
         letter = letter.ToLower();
 
-        var employees = await _context.Employees
-            .Where(e => e.FirstName.ToLower().Contains(letter)
-                     || e.LastName.ToLower().Contains(letter))
-            .ToListAsync();
+        var action = await _unitOfWork.FindAsync(e =>
+            e.FirstName.ToLower().Contains(letter.ToLower()) ||
+            e.LastName.ToLower().Contains(letter.ToLower())
+        );
 
-        if (!employees.Any())
-        {
+        if (!action.WasSuccess || !(action.Result?.Any() ?? false))
             return NotFound($"No se encontraron empleados que contengan '{letter}'.");
-        }
 
-        return Ok(employees);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> PostAsyn(Employee employee)
-    {
-        _context.Employees.Add(employee);
-        await _context.SaveChangesAsync();
-        return Ok(employee);
+        return Ok(action.Result);
     }
 }
