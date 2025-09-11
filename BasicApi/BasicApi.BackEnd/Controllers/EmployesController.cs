@@ -16,25 +16,4 @@ public class EmployesController : GenericController<Employee>
     {
         _unitOfWork = unitOfWork;
     }
-
-    [HttpGet("search")]
-    public async Task<IActionResult> FindAsync([FromQuery] string letter)
-    {
-        if (string.IsNullOrWhiteSpace(letter))
-        {
-            return BadRequest("Debe proporcionar un valor de búsqueda.");
-        }
-
-        letter = letter.ToLower();
-
-        var action = await _unitOfWork.FindAsync(e =>
-            e.FirstName.ToLower().Contains(letter.ToLower()) ||
-            e.LastName.ToLower().Contains(letter.ToLower())
-        );
-
-        if (!action.WasSuccess || !(action.Result?.Any() ?? false))
-            return NotFound($"No se encontraron empleados que contengan '{letter}'.");
-
-        return Ok(action.Result);
-    }
 }

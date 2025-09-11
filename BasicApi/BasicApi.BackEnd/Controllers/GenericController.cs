@@ -67,4 +67,15 @@ public class GenericController<T> : Controller where T : class
         }
         return BadRequest(action.Message);
     }
+
+    [HttpGet("find")]
+    public virtual async Task<IActionResult> SearchAsync(string letter)
+    {
+        var action = await _unitOfWork.SearchAsync(letter);
+        if (action.WasSuccess)
+        {
+            return Ok(action.Result);
+        }
+        return BadRequest(action.Message);
+    }
 }

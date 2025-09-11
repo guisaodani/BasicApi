@@ -10,7 +10,7 @@ public interface IGenericRepository<T> where T : class
 
     Task<ActionResponse<IEnumerable<T>>> GetAsync();
 
-    Task<ActionResponse<IEnumerable<T>>> FindAsync(Expression<Func<T, bool>> predicate);
+    Task<ActionResponse<IEnumerable<T>>> SearchAsync(string letter);
 
     Task<ActionResponse<T>> AddAsync(T entity);
 

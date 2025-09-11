@@ -3,6 +3,7 @@ using BasicApi.BackEnd.Repositories.Interfaces;
 using BasicApi.Shared.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace BasicApi.BackEnd.Repositories.Implementations;
@@ -69,26 +70,26 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         }
     }
 
-    public virtual async Task<ActionResponse<IEnumerable<T>>> FindAsync(Expression<Func<T, bool>> predicate)
+    public virtual async Task<ActionResponse<IEnumerable<T>>> SearchAsync(string letter)
     {
-        try
-        {
-            var result = await _entity.Where(predicate).ToListAsync();
+        var results = await _entity
+              .Where(x => EF.Property<string>(x, "FirstName").Contains(letter)
+                || EF.Property<string>(x, "LastName").Contains(letter))
+              .ToListAsync();
 
-            return new ActionResponse<IEnumerable<T>>
-            {
-                WasSuccess = true,
-                Result = result
-            };
-        }
-        catch (Exception ex)
+        if (!results.Any())
+
         {
             return new ActionResponse<IEnumerable<T>>
             {
-                WasSuccess = false,
-                Message = ex.Message
+                Message = "No se encontraron registros."
             };
         }
+        return new ActionResponse<IEnumerable<T>>
+        {
+            WasSuccess = true,
+            Result = results
+        };
     }
 
     public virtual async Task<ActionResponse<T>> GetAsync(int id)
