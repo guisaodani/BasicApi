@@ -1,4 +1,5 @@
 ﻿using BasicApi.BackEnd.Data;
+using BasicApi.BackEnd.UnitsOfWork.Implementations;
 using BasicApi.BackEnd.UnitsOfWork.Interfaces;
 using BasicApi.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,21 @@ namespace BasicApi.BackEnd.Controllers;
 [Route("api/[controller]")]
 public class EmployesController : GenericController<Employee>
 {
-    private readonly IGenericUnitOfWork<Employee> _unitOfWork;
+    private readonly IEmployeeUnitOfWork _employeeunitOfWork;
 
-    public EmployesController(IGenericUnitOfWork<Employee> unitOfWork) : base(unitOfWork)
+    public EmployesController(IEmployeeUnitOfWork employeeunitOfWork) : base(employeeunitOfWork)
     {
-        _unitOfWork = unitOfWork;
+        _employeeunitOfWork = employeeunitOfWork;
+    }
+
+    [HttpGet("find")]
+    public async Task<IActionResult> SearchAsync([FromQuery] string letter)
+    {
+        var action = await _employeeunitOfWork.SearchAsync(letter);
+        if (action.WasSuccess)
+        {
+            return Ok(action.Result);
+        }
+        return NotFound(action.Message);
     }
 }

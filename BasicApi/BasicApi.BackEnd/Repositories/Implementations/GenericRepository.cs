@@ -70,28 +70,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         }
     }
 
-    public virtual async Task<ActionResponse<IEnumerable<T>>> SearchAsync(string letter)
-    {
-        var results = await _entity
-              .Where(x => EF.Property<string>(x, "FirstName").Contains(letter)
-                || EF.Property<string>(x, "LastName").Contains(letter))
-              .ToListAsync();
-
-        if (!results.Any())
-
-        {
-            return new ActionResponse<IEnumerable<T>>
-            {
-                Message = "No se encontraron registros."
-            };
-        }
-        return new ActionResponse<IEnumerable<T>>
-        {
-            WasSuccess = true,
-            Result = results
-        };
-    }
-
     public virtual async Task<ActionResponse<T>> GetAsync(int id)
     {
         var row = await _entity.FindAsync(id);

@@ -1,4 +1,5 @@
-﻿using BasicApi.Shared.Responses;
+﻿using BasicApi.Shared.Entities;
+using BasicApi.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
@@ -9,8 +10,6 @@ public interface IGenericRepository<T> where T : class
     Task<ActionResponse<T>> GetAsync(int id);
 
     Task<ActionResponse<IEnumerable<T>>> GetAsync();
-
-    Task<ActionResponse<IEnumerable<T>>> SearchAsync(string letter);
 
     Task<ActionResponse<T>> AddAsync(T entity);
 
