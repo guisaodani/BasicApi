@@ -1,4 +1,5 @@
-﻿using BasicApi.Shared.Entities;
+﻿using BasicApi.Shared.DTOs;
+using BasicApi.Shared.Entities;
 using BasicApi.Shared.Responses;
 
 namespace BasicApi.BackEnd.Repositories.Interfaces;

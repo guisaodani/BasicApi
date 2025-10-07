@@ -1,4 +1,5 @@
-﻿using BasicApi.Shared.Entities;
+﻿using BasicApi.Shared.DTOs;
+using BasicApi.Shared.Entities;
 using BasicApi.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -7,6 +8,12 @@ namespace BasicApi.BackEnd.Repositories.Interfaces;
 
 public interface IGenericRepository<T> where T : class
 {
+    //aca lo nuevo para pagination
+    Task<ActionResponse<IEnumerable<T>>> GetAsync(PaginationDTO pagination);
+
+    Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);
+
+    //
     Task<ActionResponse<T>> GetAsync(int id);
 
     Task<ActionResponse<IEnumerable<T>>> GetAsync();
@@ -16,4 +23,6 @@ public interface IGenericRepository<T> where T : class
     Task<ActionResponse<T>> DeleteAsync(int id);
 
     Task<ActionResponse<T>> UpdateAsync(T entity);
+
+    //aca lo nuevo para pagination
 }

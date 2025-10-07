@@ -1,5 +1,7 @@
 ﻿using BasicApi.BackEnd.Data;
+using BasicApi.BackEnd.Helpers;
 using BasicApi.BackEnd.Repositories.Interfaces;
+using BasicApi.Shared.DTOs;
 using BasicApi.Shared.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,34 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         _context = contex;
         _entity = _context.Set<T>();
     }
+
+    //aqui pongo el pagination generico
+    public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync(PaginationDTO pagination)
+    {
+        var queryable = _entity.AsQueryable();
+
+        return new ActionResponse<IEnumerable<T>>
+        {
+            WasSuccess = true,
+            Result = await queryable
+                .Paginate(pagination)
+                .ToListAsync()
+        };
+    }
+
+    public virtual async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination)
+    {
+        var queryable = _entity.AsQueryable();
+        double count = await queryable.CountAsync();
+
+        return new ActionResponse<int>
+        {
+            WasSuccess = true,
+            Result = (int)count
+        };
+    }
+
+    //aqui pongo el pagination generico
 
     public virtual async Task<ActionResponse<T>> AddAsync(T entity)
     {
@@ -117,4 +147,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             };
         }
     }
+
+    //aqui pongo el pagination generico
 }
