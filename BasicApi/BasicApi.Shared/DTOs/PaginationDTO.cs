@@ -11,6 +11,6 @@ namespace BasicApi.Shared.DTOs
         public int Id { get; set; }
         public int Page { get; set; } = 1;
         public int RecordsNumber { get; set; } = 10;
-        public string? Search { get; set; } // nombre o apellido
+        public string? Filter { get; set; } // nombre o apellido
     }
 }

@@ -1,24 +1,98 @@
 ﻿@page "/employees"
-<h3>Empleados</h3>
 
-@if (employees == null)
+
+@if (loading)
 {
-	<p>Cargando...</p>
+	<Loading/>
 }
 else
 {
-	<table border="1">
-		<tr>
-			<>empleado</>
-		</tr>
-		@foreach (var employe in employees)
-		{
-			<tr>
-				<td>@employe.FirstName</td>
-			</tr>			
-		}
-	</table>
-	
+    <MudTable Items="@employees"
+              @ref="table"
+              ServerData="LoadListAsync"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+
+        <!-- 🔹 Barra superior -->
+        <ToolBarContent>
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <MudText Typo="Typo.h6" Class="me-4">Empleados</MudText>
+
+                <div class="d-flex align-items-center gap-2">
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Info"
+                               EndIcon="@Icons.Material.Filled.Add"
+                               OnClick="@(() => ShowModalAsync())">
+                        Nuevo
+                    </MudButton>
+
+                    <FilterComponent ApplyFilter="SetFilterValue" />
+                </div>
+            </div>
+        </ToolBarContent>
+
+        <!-- 🔹 Encabezado -->
+        <HeaderContent>
+            <MudTh style="width: 60px;">ID</MudTh>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Apellido</MudTh>
+            <MudTh>Estado</MudTh>
+            <MudTh>Fecha de Contratación</MudTh>
+            <MudTh>Salario</MudTh>
+            <MudTh style="width: 180px;">Acciones</MudTh>
+        </HeaderContent>
+
+        <!-- 🔹 Filas -->
+        <RowTemplate>
+            <MudTd>@context.Id</MudTd>
+            <MudTd>@context.FirstName</MudTd>
+            <MudTd>@context.LastName</MudTd>
+            <MudTd>
+                <MudIcon Icon="@(context.IsActive ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                         Color="@(context.IsActive ? Color.Success : Color.Error)"
+                         Style="vertical-align: middle;" />
+
+            </MudTd>
+            <MudTd>@context.HireDate.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@($"{context.Salary:C0}")</MudTd>
+
+            <MudTd>
+                <div class="d-flex gap-2">
+                    <MudTooltip Text="Editar">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Warning"
+                                   OnClick="@(() => ShowModalAsync(context.Id, true))">
+                            <MudIcon Icon="@Icons.Material.Filled.Edit" />
+                        </MudButton>
+                    </MudTooltip>
+
+                    <MudTooltip Text="Eliminar">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Error"
+                                   OnClick="@(() => DeleteAsync(context))">
+                            <MudIcon Icon="@Icons.Material.Filled.Delete" />
+                        </MudButton>
+                    </MudTooltip>
+                </div>
+            </MudTd>
+        </RowTemplate>
+
+        <!-- 🔹 Sin registros -->
+        <NoRecordsContent>
+            <MudText>No hay empleados registrados.</MudText>
+        </NoRecordsContent>
+
+        <!-- 🔹 Paginador -->
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Registros por página"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todo"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
 	
 }
 
