@@ -8,7 +8,11 @@ namespace BasicApi.FrontEnd.Components.Pages.Employees;
 
 public partial class EmployeesCreate
 {
-    private Employee employee = new();
+    private Employee employee = new()
+    {
+        HireDate = DateTime.Now
+    };
+
     [Inject] private IRepository Repository { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     [Inject] private ISnackbar Snackbar { get; set; } = null!;

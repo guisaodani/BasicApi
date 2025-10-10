@@ -18,7 +18,7 @@ public class Employee
     public string LastName { get; set; } = null!;
 
     [Display(Name = "Estado")]
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
 
     [Display(Name = "Fecha_contrato")]
     public DateTime? HireDate { get; set; }
