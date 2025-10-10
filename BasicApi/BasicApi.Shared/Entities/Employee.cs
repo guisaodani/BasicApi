@@ -21,7 +21,7 @@ public class Employee
     public bool IsActive { get; set; }
 
     [Display(Name = "Fecha_contrato")]
-    public DateTime HireDate { get; set; }
+    public DateTime? HireDate { get; set; }
 
     [Display(Name = "Salario")]
     [Range(1000000, double.MaxValue, ErrorMessage = "El campo {0} debe ser minimo {1}. ")]

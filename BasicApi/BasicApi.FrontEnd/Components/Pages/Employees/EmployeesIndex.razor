@@ -56,7 +56,7 @@ else
                          Style="vertical-align: middle;" />
 
             </MudTd>
-            <MudTd>@context.HireDate.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@(context.HireDate?.ToString("dd/MM/yyyy") ?? "")</MudTd>
             <MudTd>@($"{context.Salary:C0}")</MudTd>
 
             <MudTd>
