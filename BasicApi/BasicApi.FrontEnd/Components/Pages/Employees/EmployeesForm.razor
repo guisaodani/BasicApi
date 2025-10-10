@@ -1,4 +1,4 @@
-﻿<EditForm Model="@Employee" OnValidSubmit="HandleValidSubmit">
+﻿<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
     <MudTextField Label="Nombre"
@@ -16,7 +16,7 @@
                  Color="Color.Primary"
                  Label="Empleado Activo"
                  Class="mb-4" />
-    <MudText Typo="Typo.caption">Estado actual: @Employee.IsActive</MudText>
+ 
 
 
     <MudDatePicker T="DateTime?"
@@ -42,10 +42,12 @@
         Cancelar
     </MudButton>
 
-    <MudButton Variant="Variant.Filled"
+    <MudButton Variant="Variant.Outlined"
                StartIcon="@Icons.Material.Filled.Check"
                Color="Color.Primary"
                ButtonType="ButtonType.Submit">
-        Guardar Cambios
+        <MudHidden xs="true">
+            Guardar Cambios
+        </MudHidden>
     </MudButton>
 </EditForm>

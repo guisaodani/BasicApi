@@ -2,6 +2,7 @@
 using BasicApi.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Diagnostics.Metrics;
 
 namespace BasicApi.FrontEnd.Components.Pages.Employees;
 
@@ -9,9 +10,9 @@ public partial class EmployeesEdit
 {
     private Employee? employee;
 
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     [Inject] private IRepository Repository { get; set; } = null!;
     [Inject] private ISnackbar Snackbar { get; set; } = null!;
-    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
     [Parameter] public int Id { get; set; }
 
@@ -21,34 +22,39 @@ public partial class EmployeesEdit
 
         if (responseHttp.Error)
         {
-            Snackbar.Add("Error al cargar el empleado.", Severity.Error);
-            NavigationManager.NavigateTo("/employees");
-            return;
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                NavigationManager.NavigateTo("countries");
+            }
+            else
+            {
+                var messageError = await responseHttp.GetErrorMessageAsync();
+                Snackbar.Add(messageError!, Severity.Error);
+            }
         }
-
-        employee = responseHttp.Response!;
-        StateHasChanged(); // 👈 fuerza actualización visual del formulario
+        else
+        {
+            employee = responseHttp.Response;
+        }
     }
 
     private async Task EditAsync()
     {
-        Console.WriteLine($"[DEBUG] FRONTEND: IsActive antes de enviar = {employee!.IsActive}");
-
         var responseHttp = await Repository.PutAsync("api/Employes", employee);
 
         if (responseHttp.Error)
         {
-            var message = await responseHttp.GetErrorMessageAsync();
-            Snackbar.Add(message ?? "Error al actualizar el empleado.", Severity.Error);
+            var messageError = await responseHttp.GetErrorMessageAsync();
+            Snackbar.Add(messageError!, Severity.Error);
             return;
         }
 
-        Snackbar.Add("Empleado actualizado correctamente.", Severity.Success);
         Return();
+        Snackbar.Add("Registro guardado.", Severity.Success);
     }
 
     private void Return()
     {
-        NavigationManager.NavigateTo("/employees");
+        NavigationManager.NavigateTo("employees");
     }
 }
