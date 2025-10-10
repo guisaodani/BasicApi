@@ -1,22 +1,23 @@
-﻿<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+﻿<EditForm Model="@Employee" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
 
-
     <MudTextField Label="Nombre"
-                  @bind-Value="@Employee.FirstName"
+                  @bind-Value="Employee.FirstName"
                   For="@(() => Employee.FirstName)"
                   Class="mb-4" />
 
     <MudTextField Label="Apellido"
-                  @bind-Value="@Employee.LastName"
+                  @bind-Value="Employee.LastName"
                   For="@(() => Employee.LastName)"
                   Class="mb-4" />
 
-    <MudSwitch T="bool"
-               @bind-Checked="@Employee.IsActive"
-               Color="Color.Primary"
-               Label="Empleado Activo"
-               Class="mb-4" />
+    <MudCheckBox T="bool"
+                 @bind-Checked="Employee.IsActive"
+                 Color="Color.Primary"
+                 Label="Empleado Activo"
+                 Class="mb-4" />
+    <MudText Typo="Typo.caption">Estado actual: @Employee.IsActive</MudText>
+
 
     <MudDatePicker T="DateTime?"
                    @bind-Date="Employee.HireDate"
@@ -38,17 +39,13 @@
                StartIcon="@Icons.Material.Filled.ArrowBack"
                Color="Color.Info"
                OnClick="ReturnAction">
-        <MudHidden xs="true">
-            Cancelar
-        </MudHidden>
+        Cancelar
     </MudButton>
 
-    <MudButton Variant="Variant.Outlined"
+    <MudButton Variant="Variant.Filled"
                StartIcon="@Icons.Material.Filled.Check"
                Color="Color.Primary"
                ButtonType="ButtonType.Submit">
-        <MudHidden xs="true">
-            Guardar Cambios
-        </MudHidden>
+        Guardar Cambios
     </MudButton>
 </EditForm>

@@ -19,7 +19,8 @@ public partial class EmployeesCreate
 
     private async Task CreateAsync()
     {
-        var responseHttp = await Repository.PostAsync("/api/Employes", employee);
+        Console.WriteLine($"[DEBUG] FRONTEND: IsActive antes de enviar = {employee.IsActive}");
+        var responseHttp = await Repository.PostAsync("api/Employes", employee);
         if (responseHttp.Error)
         {
             var message = await responseHttp.GetErrorMessageAsync();
