@@ -1,11 +1,14 @@
 ﻿using BasicApi.BackEnd.UnitsOfWork.Interfaces;
 using BasicApi.Shared.DTOs;
 using BasicApi.Shared.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BasicApi.BackEnd.Controllers;
 
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
 public class CitiesController : GenericController<City>
 {

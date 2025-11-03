@@ -2,12 +2,15 @@
 using BasicApi.BackEnd.UnitsOfWork.Implementations;
 using BasicApi.BackEnd.UnitsOfWork.Interfaces;
 using BasicApi.Shared.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BasicApi.BackEnd.Controllers;
 
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
 public class EmployesController : GenericController<Employee>
 {

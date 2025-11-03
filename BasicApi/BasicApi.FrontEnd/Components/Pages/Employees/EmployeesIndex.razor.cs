@@ -6,9 +6,11 @@ using System.Net;
 using BasicApi.FrontEnd.Components.Pages.Shared;
 using BasicApi.Shared.Responses;
 using System.Diagnostics.Metrics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BasicApi.FrontEnd.Components.Pages.Employees;
 
+[Authorize(Roles = "Admin")]
 public partial class EmployeesIndex
 {
     private List<Employee>? employees { get; set; }
