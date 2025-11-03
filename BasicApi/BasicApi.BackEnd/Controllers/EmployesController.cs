@@ -21,6 +21,13 @@ public class EmployesController : GenericController<Employee>
         _employeeunitOfWork = employeeunitOfWork;
     }
 
+    [AllowAnonymous]
+    [HttpGet("combo")]
+    public async Task<IActionResult> GetComboAsync()
+    {
+        return Ok(await _employeeunitOfWork.GetComboAsync());
+    }
+
     [HttpGet("find")]
     public async Task<IActionResult> SearchAsync([FromQuery] string letter)
     {

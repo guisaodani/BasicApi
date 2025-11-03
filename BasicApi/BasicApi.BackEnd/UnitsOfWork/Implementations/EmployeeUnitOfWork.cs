@@ -14,6 +14,8 @@ public class EmployeeUnitOfWork : GenericUnitOfWork<Employee>, IEmployeeUnitOfWo
         _employeeRepository = employeeRepository;
     }
 
+    public async Task<IEnumerable<Employee>> GetComboAsync() => await _employeeRepository.GetComboAsync();
+
     public async Task<ActionResponse<IEnumerable<Employee>>> SearchAsync(string letter)
     {
         return await _employeeRepository.SearchAsync(letter);

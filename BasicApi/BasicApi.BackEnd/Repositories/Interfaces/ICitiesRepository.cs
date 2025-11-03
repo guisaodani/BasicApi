@@ -6,6 +6,8 @@ namespace BasicApi.BackEnd.Repositories.Interfaces;
 
 public interface ICitiesRepository
 {
+    Task<IEnumerable<City>> GetComboAsync(int stateId);
+
     Task<ActionResponse<IEnumerable<City>>> GetAsync(PaginationDTO pagination);
 
     Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);

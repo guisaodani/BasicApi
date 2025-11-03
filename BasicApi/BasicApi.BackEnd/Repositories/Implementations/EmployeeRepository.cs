@@ -17,6 +17,14 @@ public class EmployeeRepository : GenericRepository<Employee>, IEmployeeReposito
         _contex = contex;
     }
 
+    public async Task<IEnumerable<Employee>> GetComboAsync()
+    {
+        return await _contex.Employees
+            .OrderBy(e => e.FirstName)
+            .ThenBy(e => e.LastName)
+            .ToListAsync();
+    }
+
     public override async Task<ActionResponse<IEnumerable<Employee>>> GetAsync(PaginationDTO pagination)
     {
         var queryable = _contex.Employees.AsQueryable();

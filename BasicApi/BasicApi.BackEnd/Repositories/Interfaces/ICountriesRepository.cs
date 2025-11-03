@@ -6,6 +6,8 @@ namespace BasicApi.BackEnd.Repositories.Interfaces;
 
 public interface ICountriesRepository
 {
+    Task<IEnumerable<Country>> GetComboAsync();
+
     Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);
 
     Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination);
