@@ -1,5 +1,6 @@
 ﻿using BasicApi.BackEnd.Data;
 using BasicApi.BackEnd.UnitsOfWork.Interfaces;
+using BasicApi.Shared.DTOs;
 using BasicApi.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,17 @@ public class CountriesController : GenericController<Country>
     public CountriesController(IGenericUnitOfWork<Country> unit, ICountriesUnitOfWork countriesUnitOfWork) : base(unit)
     {
         _countriesUnitOfWork = countriesUnitOfWork;
+    }
+
+    [HttpGet("paginated")]
+    public override async Task<IActionResult> GetAsync(PaginationDTO pagination)
+    {
+        var response = await _countriesUnitOfWork.GetAsync(pagination);
+        if (response.WasSuccess)
+        {
+            return Ok(response.Result);
+        }
+        return BadRequest();
     }
 
     [HttpGet]

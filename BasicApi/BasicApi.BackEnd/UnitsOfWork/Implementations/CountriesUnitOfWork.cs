@@ -1,5 +1,6 @@
 ﻿using BasicApi.BackEnd.Repositories.Interfaces;
 using BasicApi.BackEnd.UnitsOfWork.Interfaces;
+using BasicApi.Shared.DTOs;
 using BasicApi.Shared.Entities;
 using BasicApi.Shared.Responses;
 
@@ -13,6 +14,8 @@ public class CountriesUnitOfWork : GenericUnitOfWork<Country>, ICountriesUnitOfW
     {
         _countriesRepository = countriesRepository;
     }
+
+    public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination) => await _countriesRepository.GetAsync(pagination);
 
     public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync() => await _countriesRepository.GetAsync();
 

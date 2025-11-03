@@ -1,5 +1,7 @@
 ﻿using BasicApi.BackEnd.Data;
+using BasicApi.BackEnd.Helpers;
 using BasicApi.BackEnd.Repositories.Interfaces;
+using BasicApi.Shared.DTOs;
 using BasicApi.Shared.Entities;
 using BasicApi.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +20,28 @@ public class CountriesRepository : GenericRepository<Country>, ICountriesReposit
     public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync()
     {
         var countries = await _context.Countries
-            .Include(c => c.States)
+            .OrderBy(x => x.Name)
             .ToListAsync();
         return new ActionResponse<IEnumerable<Country>>
         {
             WasSuccess = true,
             Result = countries
+        };
+    }
+
+    public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination)
+    {
+        var queryable = _context.Countries
+            .Include(c => c.States)
+            .AsQueryable();
+
+        return new ActionResponse<IEnumerable<Country>>
+        {
+            WasSuccess = true,
+            Result = await queryable
+                .OrderBy(x => x.Name)
+                .Paginate(pagination)
+                .ToListAsync()
         };
     }
 
