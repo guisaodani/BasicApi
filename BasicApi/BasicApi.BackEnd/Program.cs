@@ -3,6 +3,8 @@ using BasicApi.BackEnd.Repositories.Implementations;
 using BasicApi.BackEnd.Repositories.Interfaces;
 using BasicApi.BackEnd.UnitsOfWork.Implementations;
 using BasicApi.BackEnd.UnitsOfWork.Interfaces;
+using BasicApi.Shared.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -37,6 +39,21 @@ builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
 
 builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
+
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
+
+builder.Services.AddIdentity<User, IdentityRole>(x =>
+{
+    x.User.RequireUniqueEmail = true;
+    x.Password.RequireDigit = false;
+    x.Password.RequiredUniqueChars = 0;
+    x.Password.RequireLowercase = false;
+    x.Password.RequireNonAlphanumeric = false;
+    x.Password.RequireUppercase = false;
+})
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 

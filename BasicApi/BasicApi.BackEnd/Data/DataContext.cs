@@ -1,10 +1,12 @@
 ﻿using BasicApi.Shared.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Metrics;
 
 namespace BasicApi.BackEnd.Data;
 
-public class DataContext : DbContext
+public class DataContext : IdentityDbContext<User>
+
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
