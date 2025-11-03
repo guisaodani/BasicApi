@@ -17,6 +17,18 @@ namespace BasicApi.BackEnd.Data
         {
             await _context.Database.EnsureCreatedAsync();
             await CheckEmployeesAsync();
+            await CheckCountriesAsync();
+        }
+
+        private async Task CheckCountriesAsync()
+        {
+            if (!_context.Countries.Any())
+            {
+                _context.Countries.Add(new Country { Name = "Colombia" });
+                _context.Countries.Add(new Country { Name = "Estados Unidos" });
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         private async Task CheckEmployeesAsync()
