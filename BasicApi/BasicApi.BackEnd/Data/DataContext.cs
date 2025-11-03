@@ -12,9 +12,13 @@ public class DataContext : DbContext
 
     public DbSet<Employee> Employees { get; set; }
 
+    public DbSet<Country> Countries { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Employee>().HasIndex(c => c.Id).IsUnique();
+        modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
     }
 }
