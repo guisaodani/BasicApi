@@ -10,6 +10,13 @@
         </Authorized>
     </AuthorizeView>
 
+    <AuthorizeView Roles="User">
+        <Authorized>
+            <MudNavLink Href="employees" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">Empleados</MudNavLink>
+            
+        </Authorized>
+    </AuthorizeView>
+
 
 </MudNavMenu>
 
