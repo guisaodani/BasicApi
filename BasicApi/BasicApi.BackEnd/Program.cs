@@ -1,4 +1,5 @@
 ﻿using BasicApi.BackEnd.Data;
+using BasicApi.BackEnd.Helpers;
 using BasicApi.BackEnd.Repositories.Implementations;
 using BasicApi.BackEnd.Repositories.Interfaces;
 using BasicApi.BackEnd.UnitsOfWork.Implementations;
@@ -87,6 +88,8 @@ builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
+
+builder.Services.AddScoped<IFileStorage, FileStorage>();
 
 builder.Services.AddIdentity<User, IdentityRole>(x =>
 {

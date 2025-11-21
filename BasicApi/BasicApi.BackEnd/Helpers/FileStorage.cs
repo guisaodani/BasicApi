@@ -1,4 +1,7 @@
-﻿namespace BasicApi.BackEnd.Helpers;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+
+namespace BasicApi.BackEnd.Helpers;
 
 public class FileStorage : IFileStorage
 {
