@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BasicApi.FrontEnd.Components.Pages.Employees;
 
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin, User")]
 public partial class EmployeesIndex
 {
     private List<Employee>? employees { get; set; }
